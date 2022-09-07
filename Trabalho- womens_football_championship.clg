@@ -1,0 +1,190 @@
+algoritmo womens_football_championship;
+//Trabalho feito por Sofia Victória 
+// Síntese
+//  Objetivo:  Comparar jogadoras e quantidade de gols e depois fazendo o ranking da melhor jogadora. Comparar times e mostrando depois um ranking com nomes dos times e seus respectivos pontos
+//  Entrada: Número inteiro que indica a quantidade N de jogadoras que serão comparadas, on de N tem que ser maior que 3. ( 0 < N < 12) 
+//Sequência dos nomes e gols: 
+//Nome é um variável texto 
+//Gols é uma variável inteiro
+//  Saída: Conjunto dos nomes das N jogadoras e o número da colocação  /  Conjunto dos nomes dos N times e o número da colocação e os pontos obtidos 
+
+principal
+
+	// Declarações
+	inteiro i,j,n,x,posicao_maior;
+	real nmaior;
+	inteiro gols[15];
+	texto nomes[12]; //( 0 < N < 12) 
+	texto nomemaior;
+	inteiro result_funcao;
+
+
+	// Instruções
+	escreval("   --------------------- CAMPEONATO FEMININO DE FUTEBOL ---------------------    ");  
+
+	escreval(" ");
+	escreval("--------------------------------------------------------------------------------------------");
+	escreval("	                  Ranking de Jogadoras (Futebol Feminino)                        ");
+	escreval("--------------------------------------------------------------------------------------------");
+	escreval(" ");
+
+	escreval("Quantidade de jogadoras a serem comparadas: ");
+	leia(n);
+
+	se(n < 3)entao
+		escreval("Essa quantidade de nomes não pode ser comparada");
+	senao
+		//leitura para ordenar sequencia por saldos de gols
+		para(i de 0 ate n-1 passo 1)faca
+			escreval("Nome da Jogadora: ");
+			leia(nomes[i]);
+			escreval("Total de gols na partida: ");
+			leia(gols[i]);
+
+		fimPara
+
+
+		nomemaior = nomes[0];
+		posicao_maior = 0;
+		nmaior = 0;
+		x= 0;
+
+		para(i de 0 ate n-1 passo 1)faca
+			//sempre vou considerar o maior é o valor que esta no parametro i
+			para(j de i ate n-1 passo 1) faca
+				se(gols[j] > gols[i])entao
+					nmaior = gols[j];
+					gols[j] = gols[i];
+					gols[i] = nmaior;
+					nomemaior = nomes[j];
+					nomes[j] = nomes[i];
+					nomes[i] = nomemaior;
+				fimSe
+			fimPara
+		fimPara
+
+		//mostrar na tela - Mostrar a colocaçao de cada jogadora
+		escreval(" ");
+		escreval("Ranking das jogadoras:"); 
+
+		para(i de 0 ate n-1 passo 1)faca
+			x = x + 1;
+			escreval(x, " - ", nomes[i]);
+		fimPara
+	fimSe
+
+
+	//Ranking da Seleçoes
+	escreval(" ");
+	escreval("-----------------------------------------------------------------");
+	escreval("                          Ranking dos Time                          ");
+	escreval("------------------------------------------------------------------");
+	escreval(" ");
+	escreval("Quantidade de Time: ");
+	leia(n);
+
+
+	se(n < 2)entao
+		escreval("Essa quantidade de times não pode ser digitada");
+	senao
+
+		// Aqui eu declarei uma variavel result_funcao do tipo inteiro, onde ela vai receber o resultado da funcao ranking(funcao que é a responsável por mostrar o ranking dos times)
+		result_funcao = ranking(n,i,j,x,posicao_maior);
+
+	fimSe
+
+
+fimPrincipal // Aqui Acaba a função principal do cód
+
+
+
+// FUNCAO DO RANKING DE TIMES:
+//A funcao serve para calcular total de pontos feito pelo time durante uma partida e no final mostrando a colocao de cada time e seus respectivos pontos 
+
+funcao inteiro ranking(inteiro n,inteiro i,inteiro j ,inteiro posicao_maior, inteiro x)
+
+	// Declarações
+
+	//inteiro i,j,x,posicao_maior;
+	real nmaior;
+	real saldo[30];
+	texto nomes[12]; //( 0 < N < 12) 
+	texto nomemaior;
+	inteiro  gols_feitos,gols_tomados;
+
+
+	inteiro resultado;
+
+	resultado = 0;
+
+	//Instruções
+
+	//leitura para receber o nome do time, gols feitos e gols sofridos em uma partida
+	para(i de 0 ate n-1 passo 1)faca
+
+		escreval("Nome do Time: ");
+		leia(nomes[i]);
+		escreval("Gols Feitos: ");
+		leia(gols_feitos);
+		escreval("Gols Sofridos:");
+		leia(gols_tomados);
+		//se o gols feitos forem maiores que os gols tomados, o time que esta sendo comparado  soma 3 pontos
+		//senao gols feitos forem menores que os gols tomados nao recebera nenhum um ponto
+		//quando os gols feitos forem igual aos gols tomados o time que esta sendo comparado ganha +1 ponto
+		se(gols_feitos > gols_tomados)entao
+			saldo[i] = gols_feitos + 3;
+		senao
+			//(gols_feitos < gols_tomados)
+			saldo[i]= gols_feitos + 0;
+		fimSe
+		se(gols_feitos == gols_tomados) entao 
+				saldo[i]= gols_feitos + 1;
+			fimSe
+	fimPara
+
+
+
+	nomemaior = nomes[0];
+	posicao_maior = 0;
+	nmaior = 0;
+	x= 0;
+
+
+
+
+	para(i de 0 ate n-1 passo 1)faca
+
+		// sempre vou considerar o maior é o valor que esta no parametro i
+
+		para(j de i ate n-1 passo 1) faca
+			nmaior= saldo[i];
+			posicao_maior=i;
+			se(saldo[j] > saldo[i])entao 
+
+				nmaior = saldo[j];
+				saldo[j] = saldo[i];
+				saldo[i] = nmaior;
+				nomemaior = nomes[j];
+				nomes[j] = nomes[i];
+				nomes[i] = nomemaior;
+
+			fimSe
+			saldo[posicao_maior]= saldo[i];
+			saldo[i] = nmaior;
+		fimPara
+
+	fimPara
+
+
+
+	//mostrar na tela - Mostra o Ranking do Time
+	escreval(" ");
+	escreval("Ranking dos Times: ");
+	para(i de 0 ate n-1 passo 1)faca
+		x = x + 1;
+		escreval(x, " - ", nomes[i],"  -  ", saldo[i]::0 , " ", "pontos" ); // Nome do time com a quantidade de pontos conquistado por aquele time
+	fimPara
+
+	retorna resultado;
+
+fimFuncao
